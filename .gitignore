@@ -1,0 +1,14 @@
+HELP.md
+tmp/
+*.keras
+yfinance.cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+
+### VS Code ###
+.vscode/
