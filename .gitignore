@@ -1,7 +1,11 @@
 HELP.md
 tmp/
-*.keras
 yfinance.cache
+__pycache__
+
+### ML models ###
+*.keras
+*.h5
 
 ### IntelliJ IDEA ###
 .idea
