@@ -1,0 +1,151 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+  pull_request_target:
+    branches:
+      - main
+    types:
+      - closed
+  workflow_dispatch:
+    inputs:
+      python-version:
+        description: Desired python version
+        required: false
+        default: 3.11.7
+    is-continue-on-lint-error:
+      description: If true then build will continue despite of presence of linting error
+      required: false
+      default: "true"
+
+env:
+  PYTHON_VERSION: ${{ inputs.python-version || '3.11.7' }}
+  IS_CONTINUE_ON_LINT_ERROR: ${{ inputs.is-continue-on-lint-error || 'true' }}
+
+jobs:
+  build-gru-model:
+    runs-on:
+      - ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.1
+        with:
+          fetch-depth: 0
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install packages
+        working-directory: ml_model
+        shell: bash
+        run: pipenv sync --dev
+
+      - name: Run lint
+        working-directory: ml_model
+        shell: bash
+        continue-on-error: ${{ fromJSON(inputs.is-continue-on-lint-error) }}
+        run: pipenv run lint
+
+      - name: Build model
+        working-directory: ml_model
+        shell: bash
+        run: ./run.sh build_gru
+
+      - name: Publish artifact
+        id: publish-artifact
+        uses: actions/upload-artifact@v4.3.1
+        with:
+          name: gru_model.keras
+          path: server/models/gru_model.keras
+
+  build-lstm-model:
+    runs-on:
+      - ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.1
+        with:
+          fetch-depth: 0
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install packages
+        working-directory: ml_model
+        shell: bash
+        run: pipenv sync --dev
+
+      - name: Run lint
+        working-directory: ml_model
+        shell: bash
+        continue-on-error: ${{ fromJSON(inputs.is-continue-on-lint-error) }}
+        run: pipenv run lint
+
+      - name: Build model
+        working-directory: ml_model
+        shell: bash
+        run: ./run.sh build_lstm
+
+      - name: Publish artifact
+        id: publish-artifact
+        uses: actions/upload-artifact@v4.3.1
+        with:
+          name: lstm_model.keras
+          path: server/models/lstm_model.keras
+
+  build-server:
+    runs-on:
+      - ubuntu-latest
+    needs:
+      - build-gru-model
+      - build-lstm-model
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.1
+        with:
+          fetch-depth: 0
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install packages
+        working-directory: server
+        shell: bash
+        run: pipenv sync --dev
+
+      - name: Run lint
+        working-directory: server
+        shell: bash
+        continue-on-error: ${{ fromJSON(inputs.is-continue-on-lint-error) }}
+        run: pipenv run lint
+
+      - name: Create models directory if does not exist
+        run: mkdir -p server/models
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4.1.4
+        with:
+          name: gru_model.keras
+          path: server/models/gru_model.keras
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4.1.4
+        with:
+          name: lstm_model.keras
+          path: server/models/lstm_model.keras
+
+      - name: Build Docker image
+        working-directory: server
+        shell: bash
+        run: docker build -t finance-predictor:latest .
