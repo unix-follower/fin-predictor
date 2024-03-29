@@ -1,4 +1,5 @@
 import os
+import dataclasses
 import keras
 from keras.models import load_model
 from org_example_fin_predictor.util import constants
@@ -7,6 +8,7 @@ _LSTM_MODEL_PATH = os.getenv("APP_LSTM_MODEL_PATH")
 _GRU_MODEL_PATH = os.getenv("APP_GRU_MODEL_PATH")
 
 
+@dataclasses.dataclass
 class Config:
     HEALTHZ = {
         "live": "org_example_fin_predictor.api.health.check.liveness",

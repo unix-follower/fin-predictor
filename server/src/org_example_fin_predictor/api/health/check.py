@@ -1,6 +1,6 @@
+from typing import Callable
 import numpy as np
 from flask_healthz import HealthError
-from typing import Callable
 from org_example_fin_predictor.config import app_config
 from org_example_fin_predictor.util import constants
 
@@ -29,8 +29,8 @@ def readiness():
 def _run_check(fn: Callable[[], None], failure_message: str):
     try:
         fn()
-    except Exception:
-        raise HealthError(failure_message)
+    except Exception as e:
+        raise HealthError(failure_message) from e
 
 
 def _check_gru_model_loads():
