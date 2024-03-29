@@ -9,6 +9,7 @@ tensorflow = "*"
 scikit-learn = "*"
 chardet = "*"
 rich = "*"
+flask-healthz = "*"
 
 [dev-packages]
 pylint = "*"

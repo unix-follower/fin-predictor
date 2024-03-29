@@ -10,11 +10,19 @@ make i
 ```shell
 make run
 ```
-### Call predict API
+### Define variables
 ```shell
 #fin_predictor_host=127.0.0.1
 # or
 fin_predictor_host="$(minikube ip)"
+```
+### Health check
+```shell
+curl -v $fin_predictor_host:5000/healthz/live
+curl -v $fin_predictor_host:5000/healthz/ready
+```
+### Call predict API
+```shell
 curl -v "http://$fin_predictor_host:5000/api/v1/predict" \
  --header 'Content-Type: application/json' \
  --data '{
