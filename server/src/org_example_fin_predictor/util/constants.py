@@ -1,0 +1,2 @@
+LSTM = "LSTM"
+GRU = "GRU"

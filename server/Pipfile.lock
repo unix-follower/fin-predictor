@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "e47708dd0c3e5feb6a90727d7f3682a7ab8991a720b689268cc32836e0c66d50"
+            "sha256": "95725f2c5ade993a8e197752430cfeb723f5673e2e33238767960e49f8e128c0"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -166,6 +166,14 @@
             ],
             "index": "pypi",
             "version": "==3.0.2"
+        },
+        "flask-healthz": {
+            "hashes": [
+                "sha256:208e1f35d12d70bca623ac2dd9de17813c397f9f0a0c09aa746b4a543c75615d",
+                "sha256:3b25bfd8606950a77632925cfbbf19cac20650be51fc0efbe78c387e559e2541"
+            ],
+            "index": "pypi",
+            "version": "==1.0.1"
         },
         "flatbuffers": {
             "hashes": [
@@ -670,7 +678,7 @@
                 "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926",
                 "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2'",
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==1.16.0"
         },
         "tensorboard": {
