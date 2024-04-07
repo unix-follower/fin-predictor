@@ -4,9 +4,15 @@ setup:
 
 i:
 	pipenv install
-run:
+run-dev:
 	export APP_LSTM_MODEL_PATH="$(PWD)/models/lstm_model.keras" && \
 	export APP_GRU_MODEL_PATH="$(PWD)/models/gru_model.keras" && \
 	cd src && \
 	export FLASK_APP=org_example_fin_predictor.app && \
 	pipenv run python -m flask run --debug
+
+run:
+	export APP_LSTM_MODEL_PATH="$(PWD)/models/lstm_model.keras" && \
+	export APP_GRU_MODEL_PATH="$(PWD)/models/gru_model.keras" && \
+	cd src && \
+	pipenv run python -m gunicorn -w 4 -b 0.0.0.0:5000 org_example_fin_predictor.app:app
