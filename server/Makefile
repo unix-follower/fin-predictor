@@ -15,4 +15,9 @@ run:
 	export APP_LSTM_MODEL_PATH="$(PWD)/models/lstm_model.keras" && \
 	export APP_GRU_MODEL_PATH="$(PWD)/models/gru_model.keras" && \
 	cd src && \
-	pipenv run python -m gunicorn -w 4 -b 0.0.0.0:5000 org_example_fin_predictor.app:app
+	pipenv run python -m gunicorn \
+		--bind 0.0.0.0:5000 \
+		--workers 2 \
+		--timeout 120 \
+		--log-level=debug \
+		org_example_fin_predictor.app:app
