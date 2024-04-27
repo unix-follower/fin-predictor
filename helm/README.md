@@ -36,6 +36,10 @@ kubectl events -n fin-processor fin-predictor-<ID>
 ```shell
 nc -vz $(minikube ip) 5000
 ```
+### Stop finance predictor
+```shell
+kubectl -n fin-processor scale deployment fin-predictor --replicas 0
+```
 ### Uninstall chart
 ```shell
 helm uninstall -n fin-processor fin-predictor
