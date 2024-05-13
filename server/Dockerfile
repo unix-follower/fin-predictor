@@ -24,8 +24,5 @@ EXPOSE 5000
 ENV FLASK_APP=org_example_fin_predictor.app
 
 CMD pipenv run python -m gunicorn \
-    --bind 0.0.0.0:5000 \
-    --workers 2 \
-    --timeout 120 \
-    --log-level=debug \
+    --config ./org_example_fin_predictor/config/gunicorn.conf.py \
     org_example_fin_predictor.app:app

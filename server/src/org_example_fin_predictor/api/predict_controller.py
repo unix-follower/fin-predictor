@@ -12,7 +12,7 @@ from org_example_fin_predictor.util import util
 
 predict_api_v1 = Blueprint("predict_api_v1", __name__)
 
-logger = getLogger(__name__)
+logger = getLogger("root")
 
 
 @predict_api_v1.post("/api/v1/predict")
